@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/evn python
 
 import cx_Oracle
 
@@ -47,14 +47,14 @@ SELECT object_name\
     def get_indexes(self, schema=''):
         return self.get_object('INDEX', schema)
 
-    def get_package_specs(self, schema='')
+    def get_package_specs(self, schema=''):
         return self.get_object('PACKAGE', schema)
 
-    def get_package_bodies(self, schema='')
+    def get_package_bodies(self, schema=''):
         return self.get_object('PACKAGE BODY', schema)
 
-    def get_procedures(self, schema='')
+    def get_procedures(self, schema=''):
         return self.get_object('PROCEDURE', schema)
 
-    def get_functions(self, schema='')
+    def get_functions(self, schema=''):
         return self.get_object('FUNCTION', schema)
