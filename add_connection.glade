@@ -2,9 +2,9 @@
 <glade-interface>
   <!-- interface-requires gtk+ 2.8 -->
   <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="window1">
+  <widget class="GtkWindow" id="main_window">
     <child>
-      <widget class="GtkVBox" id="vbox1">
+      <widget class="GtkVBox" id="main_vbox">
         <property name="visible">True</property>
         <child>
           <widget class="GtkLabel" id="connection_information_label">
@@ -16,7 +16,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox1">
+          <widget class="GtkHBox" id="username_hbox">
             <property name="visible">True</property>
             <child>
               <widget class="GtkLabel" id="username_label">
@@ -28,7 +28,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry1">
+              <widget class="GtkEntry" id="username_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
@@ -43,7 +43,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox2">
+          <widget class="GtkHBox" id="passwordhbox">
             <property name="visible">True</property>
             <child>
               <widget class="GtkLabel" id="password_label">
@@ -55,7 +55,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry2">
+              <widget class="GtkEntry" id="password_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
@@ -71,7 +71,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox3">
+          <widget class="GtkHBox" id="sid_hbox">
             <property name="visible">True</property>
             <child>
               <widget class="GtkLabel" id="sid_label">
@@ -83,7 +83,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry3">
+              <widget class="GtkEntry" id="sid_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
@@ -98,7 +98,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox4">
+          <widget class="GtkHBox" id="hostname_hbox">
             <property name="visible">True</property>
             <child>
               <widget class="GtkLabel" id="hostname_label">
@@ -110,7 +110,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry4">
+              <widget class="GtkEntry" id="hostname_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
@@ -125,7 +125,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox5">
+          <widget class="GtkHBox" id="port_hbox">
             <property name="visible">True</property>
             <child>
               <widget class="GtkLabel" id="port_label">
@@ -137,7 +137,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry5">
+              <widget class="GtkEntry" id="port_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
@@ -149,6 +149,38 @@
           </widget>
           <packing>
             <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="button_hbox">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="ok_button">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">6</property>
           </packing>
         </child>
       </widget>
