@@ -10,6 +10,7 @@ class AddConnection:
         self.gladefile = 'add_connection.glade'
         self.wTree = gtk.glade.XML(self.gladefile)
         self.window = self.wTree.get_widget('main_window')
+        self.window.connect('destroy', gtk.main_quit)
         self.window.show()
 
 if __name__ == "__main__":
