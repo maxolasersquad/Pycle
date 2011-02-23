@@ -5,8 +5,11 @@ pygtk.require('2.0')
 import gtk
 import lib.objects
 import sys
+import gnomekeyring as gk
 
 class Pycle:
+
+    glib.set_application_name('pycle')
 
     def delete_event(self, widget, event, data=None):
         return False
