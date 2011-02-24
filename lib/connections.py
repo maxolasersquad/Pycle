@@ -20,9 +20,9 @@ class ConnectionList(object):
 
     def get_connections(self):
         connection_list = []
-        connection = Connection()
         keys = gk.list_item_ids_sync('pycle')
         for key in keys:
+            connection = Connection()
             item_info = gk.item_get_info_sync('pycle', key)
             attributes = gk.item_get_attributes_sync('pycle', key)
             connection.name = item_info.get_display_name()
@@ -32,7 +32,6 @@ class ConnectionList(object):
             connection.hostname = attributes['hostname']
             connection.port = attributes['port']
             connection_list.append(connection)
-        print connection_list
         return connection_list
 
     def create_connection(self, username='', password='', sid='', hostname='', port=''):
