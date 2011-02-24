@@ -50,6 +50,6 @@ class ConnectionList(object):
             if gk.item_get_info_sync('pycle', item).get_display_name() == connection.username + '@' + connection.sid + ' ' + connection.hostname:
                 gk.item_delete_sync('pycle', item)
 
-foo = ConnectionList()
-foo.create_connection('baucumd', 'baucumpass', 'dev', '', '1532')
+#foo = ConnectionList()
+#foo.create_connection('baucumd', 'baucumpass', 'dev', '', '1532')
 #connection = foo.get_connections()
