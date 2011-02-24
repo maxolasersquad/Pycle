@@ -7,6 +7,7 @@ import sys
 
 #import lib.objects
 import lib.connections
+import add_connection as addconn
 
 class Pycle:
 
@@ -55,8 +56,13 @@ class Pycle:
         add_connection_button.show()
         connection_box.pack_start(self.treeview, False, False, 0)
 
+        add_connection_button.connect('clicked', self.open_add_connection)
+
         self.window.add(connection_box)
         self.window.show_all()
+
+    def open_add_connection(self, widget):
+        add_connection = addconn.AddConnection()
 
     def main(self):
         gtk.main()

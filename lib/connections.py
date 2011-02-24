@@ -32,6 +32,7 @@ class ConnectionList(object):
             connection.hostname = attributes['hostname']
             connection.port = attributes['port']
             connection_list.append(connection)
+        print connection_list
         return connection_list
 
     def create_connection(self, username='', password='', sid='', hostname='', port=''):

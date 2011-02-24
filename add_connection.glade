@@ -18,6 +18,7 @@
         <child>
           <widget class="GtkHBox" id="username_hbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkLabel" id="username_label">
                 <property name="visible">True</property>
@@ -45,6 +46,7 @@
         <child>
           <widget class="GtkHBox" id="passwordhbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkLabel" id="password_label">
                 <property name="visible">True</property>
@@ -73,6 +75,7 @@
         <child>
           <widget class="GtkHBox" id="sid_hbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkLabel" id="sid_label">
                 <property name="visible">True</property>
@@ -100,6 +103,7 @@
         <child>
           <widget class="GtkHBox" id="hostname_hbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkLabel" id="hostname_label">
                 <property name="visible">True</property>
@@ -127,6 +131,7 @@
         <child>
           <widget class="GtkHBox" id="port_hbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkLabel" id="port_label">
                 <property name="visible">True</property>
@@ -154,6 +159,7 @@
         <child>
           <widget class="GtkHBox" id="button_hbox">
             <property name="visible">True</property>
+            <property name="homogeneous">True</property>
             <child>
               <widget class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
@@ -161,6 +167,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_cancel_button_clicked" after="yes"/>
               </widget>
               <packing>
                 <property name="position">0</property>
@@ -173,6 +180,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_ok_button_clicked" after="yes"/>
               </widget>
               <packing>
                 <property name="position">1</property>
