@@ -31,7 +31,7 @@ class AddConnection:
     def ok_button_clicked(self, widget):
         connection = lib.connections.ConnectionList()
         connection.create_connection(self.username_entry.get_text(), self.password_entry.get_text(), self.sid_entry.get_text(), self.hostname_entry.get_text(), self.port_entry.get_text())
-        self.window.destroy
+        self.window.destroy()
 
     def cancel_button_clicked(self, widget):
         self.window.destroy()
