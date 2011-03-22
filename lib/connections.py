@@ -1,4 +1,4 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
 
 #   This file is part of Git-Notifier.
 #
@@ -16,15 +16,19 @@
 
 import gnomekeyring as gk
 import glib
+import objects
 
 class Connection(object):
     """A database connection"""
-    name = ''
-    username = ''
-    password = ''
-    sid = ''
-    hostname = ''
-    port = ''
+
+    def __init__(self, attributes):
+        self.attributes = attributes
+
+    def connect(self):
+        if database == 'oracle':
+            connection = OracleObject(self.name + '/' + self.password + '@' + self.sid)
+        elif database == 'mysql':
+            connection = MysqlObject(self.hostname, self.user, self.password, database)
 
 class ConnectionList(object):
     glib.set_application_name('gk_text')
@@ -36,26 +40,45 @@ class ConnectionList(object):
         connection_list = []
         keys = gk.list_item_ids_sync('pycle')
         for key in keys:
-            connection = Connection()
+            #connection = Connection()
             item_info = gk.item_get_info_sync('pycle', key)
             attributes = gk.item_get_attributes_sync('pycle', key)
-            connection.name = item_info.get_display_name()
-            connection.username = attributes['username']
-            connection.password = item_info.get_secret()
-            connection.sid = attributes['sid']
-            connection.hostname = attributes['hostname']
-            connection.port = attributes['port']
+            attributes['name'] = item_info.get_display_name()
+            connection = Connection(attributes)
+            #connection.attributes = attributes
             connection_list.append(connection)
         return connection_list
 
-    def create_connection(self, username='', password='', sid='', hostname='', port=''):
+    def create_connection(self, username, password, db_type, **params):
         attributes = {
             'username': username,
-            'sid': sid,
-            'hostname': hostname,
-            'port': port
+            'type': db_type
         }
-        gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, username + '@' + sid + ' ' + hostname, attributes, password, True)
+
+        if attributes['type'] == 'oracle':
+            connection_name = username + '@'
+            if 'sid' in params or 'host' in params:
+                if 'sid' in params and 'host' in params:
+                    print 'Only a sid or a host may be specified for an oracle connection.'
+                    raise
+                if 'sid' in params:
+                    connection_name += params['sid']
+                else:
+                    connection_name += params['host']
+            else:
+                print 'Either a sid or a host must be specified for an oracle connection.'
+                raise
+
+        elif attributes['type'] == 'mysql':
+            if not 'host' in params:
+                print 'A host must be specified for a mysql connection.'
+                print params
+                raise
+            connection_name = username + '@' + params['host']
+
+        for param in params:
+            attributes[param] = params[param]
+        gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, connection_name, attributes, password, True)
 
     def delete_connection(self, connection):
         items = gk.list_item_ids_sync('pycle')
@@ -63,6 +86,7 @@ class ConnectionList(object):
             if gk.item_get_info_sync('pycle', item).get_display_name() == connection.username + '@' + connection.sid + ' ' + connection.hostname:
                 gk.item_delete_sync('pycle', item)
 
-#foo = ConnectionList()
-#foo.create_connection('baucumd', 'baucumpass', 'dev', '', '1532')
-#connection = foo.get_connections()
+foo = ConnectionList()
+#foo.create_connection('david', 'test', 'mysql', host='test_db')
+for conn in foo.get_connections():
+    print conn.attributes
