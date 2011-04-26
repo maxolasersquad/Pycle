@@ -14,15 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Pycle.  If not, see <http://www.gnu.org/licenses/>.
 
-#import cx_Oracle
-import MySQLdb
-
-class MysqlObject(object):
-    """Gets MySQL objects from the database"""
-    import MySQLdb
-
-    def __init__(self, host, user, password, db):
-        self.connection = MySQLdb.connect(host = host, user = user, passwd = password, db = db)
+import cx_Oracle
 
 class OracleObject(object):
     """Gets Oracle objects from the database"""
