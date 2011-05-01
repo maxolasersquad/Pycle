@@ -14,7 +14,16 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Pycle.  If not, see <http://www.gnu.org/licenses/>.
 
-import gnomekeyring as gk
+try:
+    import gnomekeyring as gk
+    keyring = 'gk'
+except ImportError:
+    try:
+        import PyMacAdmin.Security.Keychain
+        keyring = 'xk'
+    except ImportError:
+        import PyKDE4.kdeui.KWallet
+        keyring = 'kk'
 import glib
 import objects
 
@@ -22,7 +31,6 @@ class Connection(object):
     """A database connection"""
 
     def __init__(self, username, password, **params):
-
         if 'key' in params:
             self.key = params['key']
         else:
