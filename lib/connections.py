@@ -21,11 +21,39 @@ import objects
 class Connection(object):
     """A database connection"""
 
-    def __init__(self, attributes):
-        self.attributes = attributes
+    def __init__(self, username, password, **params):
+
+        if 'key' in params:
+            self.key = params['key']
+        else:
+            self.key = None
+        if 'sid' in params:
+            self.sid = params['sid']
+            self.name = username + '@' + self.sid
+        elif 'host' in params:
+            self.host = params['host']
+            self.name = username + '@' + self.host
+        else:
+            print('Unable to create a connection without a host or sid')
+            raise
+        self.username = username
+        self.password = password
+
+    def save(self):
+        try:
+            gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
+        except AttributeError:
+            gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'host': self.host}, self.password, True)
+
+    def delete(self):
+        if self.id != None:
+            gk.item_delete_sync('pycle', self.key)
 
     def connect(self):
-        connection = OracleObject(self.name + '/' + self.password + '@' + self.sid)
+        if self.sid != None:
+            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.sid)
+        else:
+            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.host)
 
 glib.set_application_name('gk_text')
 
@@ -39,34 +67,12 @@ def get_connections():
         #connection = Connection()
         item_info = gk.item_get_info_sync('pycle', key)
         attributes = gk.item_get_attributes_sync('pycle', key)
-        attributes['name'] = item_info.get_display_name()
-        connection = Connection(attributes)
-        #connection.attributes = attributes
+        if 'sid' in attributes:
+            connection = Connection(attributes['username'], item_info.get_secret(), sid=attributes['sid'], key=key)
+        else:
+            connection = Connection(attributes['username'], item_info.get_secret(), host=attributes['host'], key=key)
         connection_list.append(connection)
     return connection_list
-
-def create_connection(username, password, **params):
-    attributes = {
-        'username': username
-    }
-
-    if attributes['type'] == 'oracle':
-        connection_name = username + '@'
-        if 'sid' in params or 'host' in params:
-            if 'sid' in params and 'host' in params:
-                print('Only a sid or a host may be specified for an oracle connection.')
-                raise
-            if 'sid' in params:
-                connection_name += params['sid']
-            else:
-                connection_name += params['host']
-        else:
-            print('Either a sid or a host must be specified for an oracle connection.')
-            raise
-
-    for param in params:
-        attributes[param] = params[param]
-    gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, connection_name, attributes, password, True)
 
 def delete_connection(connection):
         items = gk.list_item_ids_sync('pycle')
@@ -75,6 +81,14 @@ def delete_connection(connection):
                 gk.item_delete_sync('pycle', item)
 
 if __name__ == '__main__':
-    create_connection('david', 'test', host='test_db')
+    test1 = Connection('david', 'test_pass', host='test_db')
+    test1.save()
+    test2 = Connection('kim', 'kim_pass', sid='test')
+    test2.save()
+    #create_connection('david', 'test', host='test_db')
     for conn in get_connections():
-        print(conn.attributes)
+        try:
+            print(conn.key, conn.name, conn.username, conn.password, conn.host)
+        except AttributeError:
+            print(conn.key, conn.name, conn.username, conn.password, conn.sid)
+        conn.delete
