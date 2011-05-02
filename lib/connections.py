@@ -54,7 +54,7 @@ class Connection(object):
             gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'host': self.host}, self.password, True)
 
     def delete(self):
-        if self.id != None:
+        if self.key != None:
             gk.item_delete_sync('pycle', self.key)
 
     def connect(self):
@@ -99,4 +99,4 @@ if __name__ == '__main__':
             print(conn.key, conn.name, conn.username, conn.password, conn.host)
         except AttributeError:
             print(conn.key, conn.name, conn.username, conn.password, conn.sid)
-        conn.delete
+        conn.delete()
