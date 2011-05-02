@@ -19,11 +19,11 @@ try:
     keyring = 'gk'
 except ImportError:
     try:
-        import PyMacAdmin.Security.Keychain
-        keyring = 'xk'
-    except ImportError:
         import PyKDE4.kdeui.KWallet
         keyring = 'kk'
+    except ImportError:
+        import PyMacAdmin.Security.Keychain
+        keyring = 'xk'
 import glib
 import objects
 
