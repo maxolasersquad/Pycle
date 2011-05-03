@@ -27,12 +27,12 @@ except ImportError:
 import glib
 import objects
 
-class Connection(object):
 glib.set_application_name('gk_text')
 
 if 'pycle' not in gk.list_keyring_names_sync():
     gk.create_sync('pycle', 'pyclepass')
 
+class Connection(object):
     """A database connection"""
 
     def __init__(self, username, password, **params):
@@ -58,11 +58,19 @@ if 'pycle' not in gk.list_keyring_names_sync():
                 gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
             except AttributeError:
                 gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'host': self.host}, self.password, True)
+        elif keyring == 'kk':
+            pass
+        elif keyring == 'xk':
+            pass
 
     def delete(self):
         if keyring == 'gk':
             if self.key != None:
                 gk.item_delete_sync('pycle', self.key)
+        elif keyring == 'kk':
+            pass
+        elif keyring == 'xk':
+            pass
 
     def connect(self):
         if self.sid != None:
@@ -74,7 +82,6 @@ def get_connections():
     connection_list = []
     keys = gk.list_item_ids_sync('pycle')
     for key in keys:
-        #connection = Connection()
         item_info = gk.item_get_info_sync('pycle', key)
         attributes = gk.item_get_attributes_sync('pycle', key)
         if 'sid' in attributes:
@@ -89,7 +96,6 @@ if __name__ == '__main__':
     test1.save()
     test2 = Connection('kim', 'kim_pass', sid='test')
     test2.save()
-    #create_connection('david', 'test', host='test_db')
     for conn in get_connections():
         try:
             print(conn.key, conn.name, conn.username, conn.password, conn.host)
