@@ -28,6 +28,11 @@ import glib
 import objects
 
 class Connection(object):
+glib.set_application_name('gk_text')
+
+if 'pycle' not in gk.list_keyring_names_sync():
+    gk.create_sync('pycle', 'pyclepass')
+
     """A database connection"""
 
     def __init__(self, username, password, **params):
@@ -48,25 +53,22 @@ class Connection(object):
         self.password = password
 
     def save(self):
-        try:
-            gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
-        except AttributeError:
-            gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'host': self.host}, self.password, True)
+        if keyring == 'gk':
+            try:
+                gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
+            except AttributeError:
+                gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'host': self.host}, self.password, True)
 
     def delete(self):
-        if self.key != None:
-            gk.item_delete_sync('pycle', self.key)
+        if keyring == 'gk':
+            if self.key != None:
+                gk.item_delete_sync('pycle', self.key)
 
     def connect(self):
         if self.sid != None:
             self.connection = OracleObject(self.username + '/' + self.password + '@' + self.sid)
         else:
             self.connection = OracleObject(self.username + '/' + self.password + '@' + self.host)
-
-glib.set_application_name('gk_text')
-
-if 'pycle' not in gk.list_keyring_names_sync():
-    gk.create_sync('pycle', 'pyclepass')
 
 def get_connections():
     connection_list = []
@@ -81,12 +83,6 @@ def get_connections():
             connection = Connection(attributes['username'], item_info.get_secret(), host=attributes['host'], key=key)
         connection_list.append(connection)
     return connection_list
-
-def delete_connection(connection):
-        items = gk.list_item_ids_sync('pycle')
-        for item in items:
-            if gk.item_get_info_sync('pycle', item).get_display_name() == connection.username + '@' + connection.sid + ' ' + connection.hostname:
-                gk.item_delete_sync('pycle', item)
 
 if __name__ == '__main__':
     test1 = Connection('david', 'test_pass', host='test_db')
