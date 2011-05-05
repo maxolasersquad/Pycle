@@ -47,10 +47,6 @@ class Connection(object):
         self.username = username
         self.password = password
 
-    def __del__(self):
-        try:
-            self.connection.close()
-
     def save(self):
         try:
             gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
@@ -62,10 +58,11 @@ class Connection(object):
             gk.item_delete_sync('pycle', self.key)
 
     def connect(self):
-        if self.sid != None:
-            self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.sid)
-        else:
-            self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.host)
+        self.connection = objects.OracleObject(self.username, self.password, self.sid)
+        #if self.sid != None:
+        #    self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.sid)
+        #else:
+        #    self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.host)
 
 glib.set_application_name('gk_text')
 
@@ -76,7 +73,6 @@ def get_connections():
     connection_list = []
     keys = gk.list_item_ids_sync('pycle')
     for key in keys:
-        #connection = Connection()
         item_info = gk.item_get_info_sync('pycle', key)
         attributes = gk.item_get_attributes_sync('pycle', key)
         if 'sid' in attributes:
@@ -86,14 +82,8 @@ def get_connections():
         connection_list.append(connection)
     return connection_list
 
-def delete_connection(connection):
-        items = gk.list_item_ids_sync('pycle')
-        for item in items:
-            if gk.item_get_info_sync('pycle', item).get_display_name() == connection.username + '@' + connection.sid + ' ' + connection.hostname:
-                gk.item_delete_sync('pycle', item)
-
 if __name__ == '__main__':
-    test1 = Connection('david', 'test', sid='testdb')
+    test1 = Connection('suncom_query', 'suncom_query1', sid='nmsdev')
     test1.save()
     #create_connection('david', 'test', host='test_db')
     for conn in get_connections():
@@ -102,3 +92,4 @@ if __name__ == '__main__':
         except AttributeError:
             print(conn.key, conn.name, conn.username, conn.password, conn.sid)
         conn.connect()
+        print conn.connection.get_object_types('OASIS_BILLING')
