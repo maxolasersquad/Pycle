@@ -47,6 +47,10 @@ class Connection(object):
         self.username = username
         self.password = password
 
+    def __del__(self):
+        try:
+            self.connection.close()
+
     def save(self):
         try:
             gk.item_create_sync('pycle', gk.ITEM_GENERIC_SECRET, self.name, {'username': self.username, 'sid': self.sid}, self.password, True)
@@ -59,9 +63,9 @@ class Connection(object):
 
     def connect(self):
         if self.sid != None:
-            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.sid)
+            self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.sid)
         else:
-            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.host)
+            self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.host)
 
 glib.set_application_name('gk_text')
 
@@ -89,14 +93,12 @@ def delete_connection(connection):
                 gk.item_delete_sync('pycle', item)
 
 if __name__ == '__main__':
-    test1 = Connection('david', 'test_pass', host='test_db')
+    test1 = Connection('david', 'test', sid='testdb')
     test1.save()
-    test2 = Connection('kim', 'kim_pass', sid='test')
-    test2.save()
     #create_connection('david', 'test', host='test_db')
     for conn in get_connections():
         try:
             print(conn.key, conn.name, conn.username, conn.password, conn.host)
         except AttributeError:
             print(conn.key, conn.name, conn.username, conn.password, conn.sid)
-        conn.delete()
+        conn.connect()
