@@ -83,12 +83,21 @@ SELECT object_name\
     def get_functions(self, schema=''):
         return self.get_object('FUNCTION', schema)
 
-class Table(object):
+class Object:
+    """Define a database object superclass"""
+
+    def __init__(self, schema, name):
+        self.schema = schema
+        self.name = name
+
+    def __str__(self):
+        return self.schema + '.' + self.name
+
+class Table(Object):
     """A database table object"""
 
-    def __init__(self, name, **params):
+    def __init__(self, schema, name, **params):
+        Object.__init__(self, schema, name)
         self.name = name
-        if 'schema' in params:
-            self.schema = params['schema']
         if 'tablespace' in params:
             self.tablespace = params['tablespace']
