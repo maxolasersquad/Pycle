@@ -73,10 +73,11 @@ class Connection(object):
             pass
 
     def connect(self):
-        if self.sid != None:
-            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.sid)
-        else:
-            self.connection = OracleObject(self.username + '/' + self.password + '@' + self.host)
+        self.connection = objects.OracleObject(self.username, self.password, self.sid)
+        #if self.sid != None:
+        #    self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.sid)
+        #else:
+        #    self.connection = objects.OracleObject(self.username + '/' + self.password + '@' + self.host)
 
 def get_connections():
     connection_list = []
@@ -92,13 +93,18 @@ def get_connections():
     return connection_list
 
 if __name__ == '__main__':
-    test1 = Connection('david', 'test_pass', host='test_db')
+    test1 = Connection('suncom_query', 'suncom_query1', sid='nmsdev')
     test1.save()
+<<<<<<< HEAD
     test2 = Connection('kim', 'kim_pass', sid='test')
     test2.save()
+=======
+    #create_connection('david', 'test', host='test_db')
+>>>>>>> 976076119b63444a313864e29221b5fb8ec3e7c4
     for conn in get_connections():
         try:
             print(conn.key, conn.name, conn.username, conn.password, conn.host)
         except AttributeError:
             print(conn.key, conn.name, conn.username, conn.password, conn.sid)
-        conn.delete()
+        conn.connect()
+        print conn.connection.get_object_types('OASIS_BILLING')

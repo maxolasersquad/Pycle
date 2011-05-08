@@ -19,15 +19,25 @@ import cx_Oracle
 class OracleObject(object):
     """Gets Oracle objects from the database"""
 
-    def __init__(self, con_string):
-        self.connection = cx_Oracle.connect(con_string)
+    def __init__(self, username, password, sid, **params):
+        if 'host' in params:
+            if 'port' in params:
+                port = params['port']
+            conn = cx_Oracle.makedsn(params['host'], port, sid)
+        else:
+            conn = sid
+        if 'mode' in params:
+            mode = params['mode']
+        else:
+            mode = None
+        self.connection = cx_Oracle.connect(user=username, password=password, dsn=conn)
         self.cursor = self.connection.cursor()
 
     def __del__(self):
         self.cursor.close()
         self.connection.close()
 
-    def get_object_types(self, schema):
+    def get_object_types(self, schema=''):
         query = "\
 SELECT DISTINCT(object_type)\
     FROM all_objects"
@@ -72,3 +82,13 @@ SELECT object_name\
 
     def get_functions(self, schema=''):
         return self.get_object('FUNCTION', schema)
+
+class Table(object):
+    """A database table object"""
+
+    def __init__(self, name, **params):
+        self.name = name
+        if 'schema' in params:
+            self.schema = params['schema']
+        if 'tablespace' in params:
+            self.tablespace = params['tablespace']
