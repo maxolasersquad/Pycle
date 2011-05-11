@@ -15,6 +15,7 @@
 #   along with Pycle.  If not, see <http://www.gnu.org/licenses/>.
 
 import cx_Oracle
+import abc
 
 class OracleObject(object):
     """Gets Oracle objects from the database"""
@@ -93,6 +94,10 @@ class Object:
     def __str__(self):
         return self.schema + '.' + self.name
 
+    @abstractmethod
+    def drop(self):
+        pass
+
 class Table(Object):
     """A database table object"""
 
@@ -101,3 +106,6 @@ class Table(Object):
         self.name = name
         if 'tablespace' in params:
             self.tablespace = params['tablespace']
+
+    def drop(self):
+       elf.cursor.execute('DROP ' + self.schema + '.' + self.name, q_schema=self.schema)
